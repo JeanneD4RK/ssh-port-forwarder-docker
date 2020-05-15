@@ -7,6 +7,10 @@ Typical use case:
 
 You are not allowed / not able to create NAT rules on your network and you wish to be able to reach some services hosted at home throught your public server.
 
+The client runs on your lan, for two reasons : 
+- it's the client who will initiate the SSH connection and create the port forwarding on the server
+- if your IP changes, it will reconnect asap. Your server IP is by definition static.
+
 ## Usage
 
 ### Client
