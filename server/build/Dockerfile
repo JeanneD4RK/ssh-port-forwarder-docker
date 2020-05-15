@@ -10,11 +10,11 @@ RUN sed -ir 's/#HostKey \/etc\/ssh\/ssh_host_rsa_key/HostKey \/etc\/ssh\/ssh_hos
 RUN sed -ir 's/#HostKey \/etc\/ssh\/ssh_host_dsa_key/HostKey \/etc\/ssh\/ssh_host_dsa_key/g' /etc/ssh/sshd_config
 RUN sed -ir 's/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/HostKey \/etc\/ssh\/ssh_host_ecdsa_key/g' /etc/ssh/sshd_config
 RUN sed -ir 's/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/HostKey \/etc\/ssh\/ssh_host_ed25519_key/g' /etc/ssh/sshd_config
-
-# Allow TCP forwarding
+RUN sed -ir 's/#ClientAliveInterval 0/ClientAliveInterval 5/g' /etc/ssh/sshd_config 
+RUN sed -ir 's/#ClientAliveCountMax 3/ClientAliveCountMax 1/g' /etc/ssh/sshd_config 
 RUN sed -ir 's/AllowTcpForwarding no/AllowTcpForwarding yes/g' /etc/ssh/sshd_config 
-# Allow sshd to bind any IP (0.0.0.0)
 RUN sed -ir 's/GatewayPorts no/GatewayPorts yes/g' /etc/ssh/sshd_config 
+
 
 COPY docker-entrypoint.sh /root/
 RUN chmod +x /root/docker-entrypoint.sh
