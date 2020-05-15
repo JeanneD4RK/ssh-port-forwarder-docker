@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+        ssh-tunnel:
+                image: ssh-tunnel
+                build: ./build/ssh-tunnel
+                environment:
+                        - "REMOTE_HOST=1.2.3.4"
+                        - "REMOTE_PORT=10122"
+                        - "REMOTE_LISTEN=80"
+                        - "LOCAL_HOST=localhost"
+                        - "LOCAL_PORT=9000"
+

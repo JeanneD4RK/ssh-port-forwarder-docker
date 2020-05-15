@@ -1,0 +1,7 @@
+version: "3.5"
+services:
+        ssh:
+                image: ssh-tunnel-server
+                build: ./build/
+                ports:
+                        - "10122:22"
