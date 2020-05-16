@@ -1,10 +1,10 @@
-version: '3.5'
+version: "3.5"
 services:
-        ssh-tunnel:
-                image: ssh-tunnel
-                build: ./build/ssh-tunnel
+        ssh:
+                image: ssh-tunnel-client
+                build: ./build/
                 environment:
-                        - "REMOTE_HOST=1.2.3.4"
+                        - "REMOTE_HOST=192.168.11.21"
                         - "REMOTE_PORT=10122"
                         - "REMOTE_LISTEN=80"
                         - "LOCAL_HOST=localhost"
