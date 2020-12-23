@@ -17,7 +17,9 @@ RUN sed -ir 's/GatewayPorts no/GatewayPorts yes/g' /etc/ssh/sshd_config
 
 
 COPY docker-entrypoint.sh /root/
+COPY add_key.sh /root
 RUN chmod +x /root/docker-entrypoint.sh
+RUN chmod +x /root/add_key.sh
 RUN mkdir /root/.ssh
 RUN touch /root/.ssh/authorized_keys
 

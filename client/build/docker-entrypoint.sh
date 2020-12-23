@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Check if the process is still running. Returns 0 if the process is alive, 1 if the process is dead (SSH crashed)
 function alive {
 	if kill -0 $1 2>/dev/null; then
 		return 0
@@ -31,13 +32,13 @@ if [ -z "$REMOTE_LISTEN" ]; then
 	exit 1
 fi
 
-if [ -z "$LOCAL_HOST" ]; then
-	echo "LOCAL_HOST argument missing"
+if [ -z "$FORWARD_HOST" ]; then
+	echo "FORWARD_HOST argument missing"
 	exit 1
 fi
 
-if [ -z "$LOCAL_PORT" ]; then
-	echo "LOCAL_PORT argument missing"
+if [ -z "$FORWARD_PORT" ]; then
+	echo "FORWARD_PORT argument missing"
 	exit 1
 fi
 
@@ -46,17 +47,20 @@ while true; do
 	# Init SSH pid to inexistent PID to make sure the while will run once.
 	SSH_PID=-1
 	while !(alive $SSH_PID); do
-		/usr/bin/ssh -R "0.0.0.0:$REMOTE_LISTEN:$LOCAL_HOST:$LOCAL_PORT" -o "ServerAliveInterval=5" -o "ServerAliveCountMax=2" -o "ConnectTimeout=10" -o "ExitOnForwardFailure=True" -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i id_rsa.pem -p "$REMOTE_PORT" -N "root@$REMOTE_HOST" 2>/dev/null 1>&2 &
+		/usr/bin/ssh -R "0.0.0.0:$REMOTE_LISTEN:$FORWARD_HOST:$FORWARD_PORT" -o "ServerAliveInterval=5" -o "ServerAliveCountMax=2" -o "ConnectTimeout=10" -o "ExitOnForwardFailure=True" -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i id_rsa.pem -p "$REMOTE_PORT" -N "root@$REMOTE_HOST" 2>/dev/null 1>&2 &
 		SSH_PID=$!
 		# Sleep 5 to let SSH crash if connect fails
 		sleep 5
 	done
+	
 	# While is over, SSH is connected.
-	echo "$(date) : Connected to $REMOTE_HOST:$REMOTE_PORT (PID $SSH_PID). Forwarding port $REMOTE_LISTEN to $LOCAL_HOST:$LOCAL_PORT"
+	echo "$(date) : Connected to $REMOTE_HOST:$REMOTE_PORT (PID $SSH_PID). Forwarding port $REMOTE_LISTEN to $FORWARD_HOST:$FORWARD_PORT"
 
-	# Now wait for the PID to crash, notify it to the logs and loop.
+	# Infinite while to monitor PID
 	while alive $SSH_PID; do
 		sleep 1
 	done
+	
+	# Notify crash in STDOUT and loop
 	echo "$(date) : SSH crashed. Retrying..."
 done
