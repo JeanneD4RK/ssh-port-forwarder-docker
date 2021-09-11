@@ -16,12 +16,15 @@ The client runs on your lan, for two reasons :
 ### Server
 
 You may want to set your own external port in the `docker-compose.yaml` file. (2222 by default)
+
 Then go in `server` directory and run `docker-compose up -d`
 
 ### Client
 
 You will need to personalize the environment variables to run the app. 
+
 Go in `client` directory and open the `docker-compose.yaml` file
+
 
 Change the following settings : 
 `REMOTE_HOST` is the server the client will connect to
