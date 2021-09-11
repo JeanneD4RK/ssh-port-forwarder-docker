@@ -27,15 +27,15 @@ Go in `client` directory and open the `docker-compose.yaml` file
 
 
 Change the following settings : 
-`REMOTE_HOST` is the server the client will connect to
+- `REMOTE_HOST` is the server the client will connect to
 
-`REMOTE_PORT` is the SSH port the client will connect to
+- `REMOTE_PORT` is the SSH port the client will connect to
 
-`REMOTE_LISTEN` is the port the server will listen on to forward traffic
+- `REMOTE_LISTEN` is the port the server will listen on to forward traffic
 
-`FORWARD_HOST` is the host address where the traffic must be forwarded
+- `FORWARD_HOST` is the host address where the traffic must be forwarded
 
-`FORWARD_PORT` is the host port where the traffic must be forwarded
+- `FORWARD_PORT` is the host port where the traffic must be forwarded
 
 
 ## Manual usage
@@ -60,15 +60,15 @@ docker build -t ssh-port-forwarder-server .
 
 Client container requires 5 variables :
 
-`REMOTE_HOST` is the server the client will connect to
+- `REMOTE_HOST` is the server the client will connect to
 
-`REMOTE_PORT` is the SSH port the client will connect to
+- `REMOTE_PORT` is the SSH port the client will connect to
 
-`REMOTE_LISTEN` is the port the server will listen on to forward traffic
+- `REMOTE_LISTEN` is the port the server will listen on to forward traffic
 
-`FORWARD_HOST` is the host address where the traffic must be forwarded
+- `FORWARD_HOST` is the host address where the traffic must be forwarded
 
-`FORWARD_PORT` is the host port where the traffic must be forwarded
+- `FORWARD_PORT` is the host port where the traffic must be forwarded
 
 ```
 docker run -d -e REMOTE_HOST=1.2.3.4 -e REMOTE_PORT=2222 -e REMOTE_LISTEN=80 -e FORWARD_HOST=myserver.lan -e FORWARD_PORT=80 --name my-forwarder-client ssh-port-forwarder-client
