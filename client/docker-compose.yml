@@ -4,9 +4,9 @@ services:
                 image: ssh-tunnel-client
                 build: ./build/
                 environment:
-                        - "REMOTE_HOST=192.168.11.21"
-                        - "REMOTE_PORT=10122"
-                        - "REMOTE_LISTEN=80"
-                        - "LOCAL_HOST=localhost"
-                        - "LOCAL_PORT=9000"
+                        - "REMOTE_HOST=1.2.3.4"
+                        - "REMOTE_PORT=2222"
+                        - "REMOTE_LISTEN=9000"
+                        - "FORWARD_HOST=192.168.1.20"
+                        - "FORWARD_PORT=9000"
 

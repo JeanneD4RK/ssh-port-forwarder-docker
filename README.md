@@ -5,29 +5,55 @@ This project provides an easy and reliable solution to create a SSH remote port 
 
 Typical use case: 
 
-You are not allowed / not able to create NAT rules on your network and you wish to be able to reach some services hosted at home throught your public server.
+You are not allowed / not able to create NAT rules on your network and you wish to reach some local services through your public server.
 
-The client runs on your lan, for two reasons : 
+The client runs on your lan, for two reasons :
 - it's the client who will initiate the SSH connection and create the port forwarding on the server
 - if your IP changes, it will reconnect asap. Your server IP is by definition static.
 
-## Build
+## Docker compose
 
-### Client 
+### Server
+
+You may want to set your own external port in the `docker-compose.yaml` file. (2222 by default)
+Then go in `server` directory and run `docker-compose up -d`
+
+### Client
+
+You will need to personalize the environment variables to run the app. 
+Go in `client` directory and open the `docker-compose.yaml` file
+
+Change the following settings : 
+`REMOTE_HOST` is the server the client will connect to
+
+`REMOTE_PORT` is the SSH port the client will connect to
+
+`REMOTE_LISTEN` is the port the server will listen on to forward traffic
+
+`FORWARD_HOST` is the host address where the traffic must be forwarded
+
+`FORWARD_PORT` is the host port where the traffic must be forwarded
+
+
+## Manual usage
+
+### Build
+
+#### Client 
 ```
 cd client/build
 docker build -t ssh-port-forwarder-client .
 ```
 
-### Server
+#### Server
 ```
 cd server/build
 docker build -t ssh-port-forwarder-server .
 ```
 
-## Usage
+### Usage
 
-### Client
+#### Client
 
 Client container requires 5 variables :
 
@@ -66,7 +92,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCqudH4LBkwqVqLTbri2TOajRnvqoUDWi7k4ptefHCo
 In case of failure, the client will try to reconnect every seconds.
 
 
-### Server
+#### Server
 
 The server does not require any configuration to run. You only need to forward the desired public port to the container's port 22
 
