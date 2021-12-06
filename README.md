@@ -29,7 +29,7 @@ The client container requires 6 environment variables :
 
 All the examples below are based on this diagram :
 
-![diagram](https://github.com/IsThisUsernameFree/ssh-port-forwarder-docker/blob/main/diagram.png?raw=true)
+![diagram](https://github.com/IsThisUsernameFree/ssh-port-forwarder-docker/blob/master/diagram.png?raw=true)
 
 ## Docker compose
 
