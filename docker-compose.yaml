@@ -1,15 +1,15 @@
 version: "3.5"
 services:
         server:
-                image: test-forwarder
-                build: .
+                image: ssh-forwarder
+                build: ./build
                 environment:
                         - "MODE=server"
                 ports:
                         - "2222:22"
         client:
-                image: test-forwarder
-                build: .
+                image: ssh-forwarder
+                build: ./build
                 volumes:
                         - ./tunnels.conf:/root/tunnels.conf
                 environment:

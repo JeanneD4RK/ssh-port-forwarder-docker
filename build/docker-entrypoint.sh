@@ -12,11 +12,11 @@ function getTunnel {
 # If not args are passed to docker-entrypoint.sh, running normally.
 if [ "$#" -eq 0 ]; then
 	if [ -z "$MODE" ]; then
-		echo "MODE not specified. Running as server"
+		echo "[INFO ] : $(date) : MODE not specified. Running as server"
 		MODE="server"
 	fi
 	if [ "$MODE" == "server" ]; then
-		echo "Starting forwarder as server mode"
+		echo "[INFO ] : $(date) : Starting forwarder as server mode"
 		# Change root password at every boot to prevent SSH login. We use private key so it's not a problem.
 		echo "root:$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64 | rev | cut -b 2- | rev)" | chpasswd 1>/dev/null 2>&1
 		# Generate server key on first run
@@ -25,7 +25,7 @@ if [ "$#" -eq 0 ]; then
 			/usr/bin/ssh-keygen -t rsa -b 4096 -f  /etc/ssh/ssh_host_key 1>/dev/null 2>&1
 		fi
 		# Run sshd service foreground
-		echo "OK: SSH service started"
+		echo "[OK   ] : $(date) : SSH service started"
 		/usr/sbin/sshd -D
 	elif [ "$MODE" == "client" ]; then
 		if [ -z "$CONF" ]; then
@@ -37,7 +37,7 @@ if [ "$#" -eq 0 ]; then
 			exit
 		fi
 
-		echo "Starting forwarder as client mode"
+		echo "[INFO ] : $(date) : Starting forwarder as client mode"
 		
 		# Generate the user private key if not exist
 		if [ ! -f "/root/id_rsa.pem" ]; then

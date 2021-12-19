@@ -23,7 +23,7 @@ FORWARDPORT="$6"
 
 SSH_PID=-1
 
-echo "[INFO] $(date) : SSH client #$TUNNELID started (connecting to $HOST:$PORT to forward port $LISTEN to $FORWARDHOST:$FORWARDPORT)" 
+echo "[INFO ] $(date) : SSH client #$TUNNELID started (connecting to $HOST:$PORT to forward port $LISTEN to $FORWARDHOST:$FORWARDPORT)" 
 
 startTunnel
 while true; do
@@ -33,7 +33,7 @@ while true; do
 	done
 
 	# While is over, SSH is connected.
-	echo "[OK] $(date) : Tunnel #$TUNNELID : Connected to $HOST:$PORT (PID $SSH_PID). Forwarding TCP :$LISTEN to $FORWARDHOST:$FORWARDPORT"
+	echo "[OK   ] $(date) : Tunnel #$TUNNELID : Connected to $HOST:$PORT (PID $SSH_PID). Forwarding TCP :$LISTEN to $FORWARDHOST:$FORWARDPORT"
 
 	# Infinite while to monitor PID
 	while alive $SSH_PID; do
