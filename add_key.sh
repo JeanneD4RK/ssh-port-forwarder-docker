@@ -8,7 +8,7 @@ then
 	exit 2
 fi
 
-if echo "$KEY" | grep "ssh-rsa" 1>2 2>/dev/null
+if echo "$KEY" | grep "ssh-rsa" 1>&2 2>/dev/null
 then
 	# ssh-rsa key dectected
 	echo "$KEY" > /root/.ssh/authorized_keys
