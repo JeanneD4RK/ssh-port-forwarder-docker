@@ -13,23 +13,25 @@ The client runs on your LAN, for two reasons :
 
 ## General information
 
-The client container requires 6 environment variables :
-
-- `MODE=client`, otherwise the container will run as server mode
-
-- `REMOTE_HOST` is the remote server the client will connect to
-
-- `REMOTE_PORT` is the port SSH listens on on the remote
-
-- `REMOTE_LISTEN` is the port the server will listen on to forward traffic
-
-- `FORWARD_HOST` is the host address where the traffic must be forwarded
-
-- `FORWARD_PORT` is the host port where the traffic must be forwarded
-
 All the examples below are based on this diagram :
 
 ![diagram](https://github.com/IsThisUsernameFree/ssh-port-forwarder-docker/blob/master/diagram.png?raw=true)
+
+The client container requires 2 environment variables :
+
+- `MODE=client`, otherwise the container will run as server mode
+- `CONF=configuration.conf` the file containing the tunnels to start
+
+### Tunnel configuration
+
+Each line of the configuration file must specify :
+`<remote host>:<remote port>:<remote listen port>:<forward host>:<forward port>`
+
+Example : 
+```
+1.2.3.4:2222:80:myserver.lan:8080
+1.2.3.4:2222:6000:myotherserver.lan:3389 #This one is not in the example diagram.
+```
 
 ## Docker compose
 
@@ -46,13 +48,13 @@ This file should help you get started. Simply remove the part you don't need (cl
 
 The server does not require any configuration to run. You only need to forward the desired public port to the container's port 22
 
-`docker run -d -p 2222:22 --name my-forwarder-server ssh-port-forwarder`
+`docker run -d -p 2222:22 -p 80:80 --name my-forwarder-server ssh-port-forwarder`
 
 #### Client
 
 The following example will send all the traffic on 1.2.3.4:80 to myserver.lan:80
 
-`docker run -d -e MODE=client -e REMOTE_HOST=1.2.3.4 -e REMOTE_PORT=2222 -e REMOTE_LISTEN=80 -e FORWARD_HOST=myserver.lan -e FORWARD_PORT=8080 --name my-forwarder-client ssh-port-forwarder`
+`docker run -d -e MODE=client -e CONF=tunnels.conf -v $PWD/tunnels.conf:/root/tunnels.conf --name my-forwarder-client ssh-port-forwarder`
 
 In case of connection failure, the client will try to reconnect every seconds.
 
@@ -80,7 +82,7 @@ Once you have the public key, you need to inject it in the server container (don
 
 
 ```
-docker exec <container name> add_key.sh "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCqudH4LBkwqVqLTbri2TOajRnvqoUDWi7k4ptefHCoUe3fjHjRfblp5HPA6oZX8spgMXnWBwURcYyuReyJPQ0uKXJ7fzIOh5zan2Pu721mbH6N74R4tPWpTrUQyFv10d78Bl/qefkfW2R6KmJfBU3S2jWACgM161MwI4uAigEBw0X+0XLmp/gUB1bXJw8WdN9m+Tpfzv+hJxECqUn1qN4uxwRDQbFa+dPNj1mgBnYULkh73P+Ku7HdgAorgtT38mfPT6T7lU3A9/HplSqMEyf7wvWEUZvzBCkgkgqCyYo1OwXDBXWHOXackUkrAt21rA3QntPR18kwIHAStcnVREYUJXvh+RFcl/snsJ7ATc8YHUxnn4/y3y+Ibfd5OEPFQW7PNZyN+KRSfI2XSCLYaVSINJJLFHf2BDnBfdfiMSbE4waxtpmRTQE3QfXQ/pbQiStKzlkFn4bEd2iPD9w+fCLIySm/O6Mu29TssP6oY5rSYebMuIM7GfQ+Despd0UOdyM= root@c15defeb6607"
+docker exec <container name> ./add_key.sh "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCqudH4LBkwqVqLTbri2TOajRnvqoUDWi7k4ptefHCoUe3fjHjRfblp5HPA6oZX8spgMXnWBwURcYyuReyJPQ0uKXJ7fzIOh5zan2Pu721mbH6N74R4tPWpTrUQyFv10d78Bl/qefkfW2R6KmJfBU3S2jWACgM161MwI4uAigEBw0X+0XLmp/gUB1bXJw8WdN9m+Tpfzv+hJxECqUn1qN4uxwRDQbFa+dPNj1mgBnYULkh73P+Ku7HdgAorgtT38mfPT6T7lU3A9/HplSqMEyf7wvWEUZvzBCkgkgqCyYo1OwXDBXWHOXackUkrAt21rA3QntPR18kwIHAStcnVREYUJXvh+RFcl/snsJ7ATc8YHUxnn4/y3y+Ibfd5OEPFQW7PNZyN+KRSfI2XSCLYaVSINJJLFHf2BDnBfdfiMSbE4waxtpmRTQE3QfXQ/pbQiStKzlkFn4bEd2iPD9w+fCLIySm/O6Mu29TssP6oY5rSYebMuIM7GfQ+Despd0UOdyM= root@c15defeb6607"
 ```
 
 Your client, if running, should connect right away.
