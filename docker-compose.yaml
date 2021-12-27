@@ -7,6 +7,7 @@ services:
                         - "MODE=server"
                 ports:
                         - "2222:22"
+                        - "80:80"
         client:
                 image: ssh-forwarder
                 build: ./build
